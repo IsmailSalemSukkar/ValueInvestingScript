@@ -2,32 +2,6 @@ library(tidyverse)
 library(tidyquant)
 library(yfinance)
 
-#######Pull Data from yahoo##########
-stock1 = tq_exchange(("NASDAQ"))
-stock2 = tq_exchange(("NYSE"))
-stock3 = tq_exchange(("AMEX"))
-
-stocks = rbind(stock1,stock2,stock3)
-stocks = filter(stocks, stocks$country == "United States")
-
-dataOGG = getQuote(stocks$symbol,
-                  what = yahooQF(c("Name","Ask","Market Capitalization",
-                                   "Earnings/Share","P/E Ratio","Price/Book", "Shares Outstanding")))
-
-dataOG = rownames_to_column(dataOGG, "Symbol")
-
-dataO = get_bs(stocks$symbol,report_type = "quarterly")
-
-
-dataOO = dataO %>% group_by((ticker)) %>% slice_max(date)
-
-data = inner_join(dataOG,dataOO,by = c("Symbol" = "ticker"))
-
-write.csv(data,"stock_data.csv")
-
-
-
-
 ################All Data########
 
 data = read.csv("stock_raw.csv")
