@@ -6,24 +6,31 @@ library(yfinance)
 
 data = read.csv("stock_raw.csv")
 
+data[1] = NULL
+
 PB_Ratio = data$Market.Capitalization / data$netTangibleAssets
 InversePE = 1/data$P.E.Ratio
 BookPrice = data$netTangibleAssets / data$Shares.Outstanding
+CurrentRatio = data$totalCurrentAssets/data$totalCurrentLiabilities
+dataF = cbind(data,PB_Ratio,InversePE,BookPrice,CurrentRatio)
 
-dataF = cbind(data,PB_Ratio,InversePE,BookPrice)
 
-
-dataF = relocate(dataF,"Price/Book Ratio" = PB_Ratio, .after = 4)
-dataF = relocate(dataF,"P.E.Ratio", .after = 5)
-dataF = relocate(dataF,"Inverse P/E Ratio" =InversePE, .after = 6)
-dataF = relocate(dataF,BookPrice, .after = 7)
+dataF = relocate(dataF,"Price/Book Ratio" = PB_Ratio, .after = 1)
+dataF = relocate(dataF,CurrentRatio, .after = 2)
+dataF = relocate(dataF,"P.E.Ratio", .after = 3)
+dataF = relocate(dataF,"Inverse P/E Ratio" =InversePE, .after = 4)
+dataF = relocate(dataF,BookPrice, .after = 6)
+dataF = relocate(dataF,Name, .after = 7)
 
 
 
 write.csv(dataF, "stocks_all.csv")
 
 dataFinal = filter(dataF, dataF$`Price/Book Ratio` > 0 & 
-                     dataF$`Price/Book Ratio` < 1 & dataF$Earnings.Share>0)
+                          dataF$`Price/Book Ratio` < .6666666 &  
+                          dataF$CurrentRatio > 2 & 
+                          dataF$Earnings.Share > 0 &
+                          dataF$P.E.Ratio < 6)
 
 
 

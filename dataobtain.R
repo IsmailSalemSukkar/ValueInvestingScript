@@ -9,7 +9,8 @@ stocks = filter(stocks, stocks$country == "United States")
 
 dataOGG = getQuote(stocks$symbol,
                    what = yahooQF(c("Name","Ask","Market Capitalization",
-                                    "Earnings/Share","P/E Ratio","Price/Book", "Shares Outstanding")))
+                                    "Earnings/Share","P/E Ratio","Price/Book", 
+                                    "Shares Outstanding","Currency")))
 
 dataOG = rownames_to_column(dataOGG, "Symbol")
 
@@ -20,4 +21,4 @@ dataOO = dataO %>% group_by((ticker)) %>% slice_max(date)
 
 data = inner_join(dataOG,dataOO,by = c("Symbol" = "ticker"))
 
-write.csv(data,"stock_data.csv")
+write.csv(data,"stock_raw.csv")
