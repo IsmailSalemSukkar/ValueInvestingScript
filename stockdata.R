@@ -9,33 +9,33 @@ data = read.csv("stock_raw.csv")
 data[1] = NULL
 
 PB_Ratio = data$Market.Capitalization / data$netTangibleAssets
-InversePE = 1/data$P.E.Ratio
+#InversePE = 1/data$P.E.Ratio
 BookPrice = data$netTangibleAssets / data$Shares.Outstanding
 CurrentRatio = data$totalCurrentAssets/data$totalCurrentLiabilities
-dataF = cbind(data,PB_Ratio,InversePE,BookPrice,CurrentRatio)
+NetCurrentRatio = data$totalCurrentAssets/data$totalLiab 
+allStocks = cbind(data,PB_Ratio,BookPrice,CurrentRatio,NetCurrentRatio)
 
 
-dataF = relocate(dataF,"Price/Book Ratio" = PB_Ratio, .after = 1)
-dataF = relocate(dataF,CurrentRatio, .after = 2)
-dataF = relocate(dataF,"P.E.Ratio", .after = 3)
-dataF = relocate(dataF,"Inverse P/E Ratio" =InversePE, .after = 4)
-dataF = relocate(dataF,BookPrice, .after = 6)
-dataF = relocate(dataF,Name, .after = 7)
-
-
-
-write.csv(dataF, "stocks_all.csv")
-
-dataFinal = filter(dataF, dataF$`Price/Book Ratio` > 0 & 
-                          dataF$`Price/Book Ratio` < .6666666 &  
-                          dataF$CurrentRatio > 2 & 
-                          dataF$Earnings.Share > 0 &
-                          dataF$P.E.Ratio < 6)
+allStocks = relocate(allStocks,"Price/Book Ratio" = PB_Ratio, .after = 1)
+allStocks = relocate(allStocks,CurrentRatio, .after = 2)
+allStocks = relocate(allStocks,NetCurrentRatio, .after = 3)
+allStocks = relocate(allStocks,"P.E.Ratio", .after = 4)
+allStocks = relocate(allStocks,Ask, .after = 5)
+allStocks = relocate(allStocks,BookPrice, .after = 6)
+allStocks = relocate(allStocks,Name, .after = 7)
 
 
 
-write.csv(dataFinal, "stocks_filtered.csv")
 
+write.csv(allStocks, "stocks_all.csv")
+
+allStocksFiltered = filter(allStocks, allStocks$`Price/Book Ratio` > 0 & 
+                          allStocks$`Price/Book Ratio` < .6666666 &  
+                          (allStocks$CurrentRatio > 2 | allStocks$CurrentRatio < 1))
+
+
+
+write.csv(allStocksFiltered, "stocks_filtered.csv")
 
 
 
@@ -47,10 +47,10 @@ stock3 = tq_exchange(("AMEX"))
 
 stocks = rbind(stock1,stock2,stock3)
 
-dataFUS = filter(dataF, Symbol %in% stocks$symbol[stocks$country == "United States"])
+usStocks = filter(allStocks, Symbol %in% stocks$symbol[stocks$country == "United States"])
 
-write.csv(dataFUS,"stocks_US.csv")
+write.csv(usStocks,"stocks_US.csv")
 
-dataFinalUS = filter(dataFinal, Symbol %in% stocks$symbol[stocks$country == "United States"])
+usStocksFiltered = filter(allStocksFiltered, Symbol %in% stocks$symbol[stocks$country == "United States"])
 
-write.csv(dataFinalUS, "stocks_filteredUS.csv")
+write.csv(usStocksFiltered, "stocks_filteredUS.csv")
