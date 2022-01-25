@@ -5,7 +5,7 @@ options(scipen = 999)
 
 ################All Data########
 
-data = read.csv("stock_raw.csv")
+data = read.csv("stock_test_raw.csv")
 
 data[1] = NULL
 
@@ -18,7 +18,6 @@ PB_Ratio = data$Market.Capitalization / data$netTangibleAssets
 Net_PB_Ratio = data$Market.Capitalization/(data$totalCurrentAssets - data$totalLiab)
 PriceEarningRatio = data$Ask/data$Earnings.Share
 NetBookPriceEarningRatio = (data$totalCurrentAssets - data$totalLiab) / (data$Earnings.Share * data$Shares.Outstanding)
-
 allStocks = cbind(data,BookPrice,NetBookPrice,CurrentRatio,NetCurrentRatio,PB_Ratio,Net_PB_Ratio,NetBookPriceEarningRatio,PriceEarningRatio)
 
 
@@ -40,11 +39,13 @@ allStocks = relocate(allStocks,Name, .after = 10)
 
 write.csv(allStocks, "stocks_all.csv")
 
-allStocksFiltered = filter(allStocks, allStocks$`Net Price/Book Ratio` > 0 & 
-                             allStocks$`Net Price/Book Ratio` < .75 &  
+allStocksFiltered = filter(allStocks, 
+                             allStocks$`Net Price/Book Ratio` > 0 & 
+                             allStocks$`Net Price/Book Ratio` < .75 
+                             &  
                              #(allStocks$CurrentRatio > 2 | allStocks$CurrentRatio < 0) &
                              #allStocks$NetBookPrice > 0 &
-                           allStocks$PriceEarningRatio > 0
+                             allStocks$PriceEarningRatio > 0
                            )
 
 
@@ -69,3 +70,9 @@ usStocksFiltered = filter(allStocksFiltered, Symbol %in% stocks$symbol[stocks$co
 
 write.csv(usStocksFiltered, "stocks_filteredUS.csv")
 
+stocksInterest = c("AESE","SSY","ACR","SOS")
+
+portfolio = filter(allStocks, Symbol %in% 
+                          stocksInterest)
+
+write.csv(portfolio, "portfolio.csv")
