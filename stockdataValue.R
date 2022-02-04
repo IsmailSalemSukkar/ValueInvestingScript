@@ -1,11 +1,10 @@
 library(tidyverse)
 library(tidyquant)
-library(yfinance)
 options(scipen = 999)
 
 ################All Data########
 
-data = read.csv("stock_test_raw.csv")
+data = read.csv("stock_raw.csv")
 
 data[1] = NULL
 
@@ -18,7 +17,10 @@ PB_Ratio = data$Market.Capitalization / data$netTangibleAssets
 Net_PB_Ratio = data$Market.Capitalization/(data$totalCurrentAssets - data$totalLiab)
 PriceEarningRatio = data$Ask/data$Earnings.Share
 NetBookPriceEarningRatio = (data$totalCurrentAssets - data$totalLiab) / (data$Earnings.Share * data$Shares.Outstanding)
-allStocks = cbind(data,BookPrice,NetBookPrice,CurrentRatio,NetCurrentRatio,PB_Ratio,Net_PB_Ratio,NetBookPriceEarningRatio,PriceEarningRatio)
+PriceDividendRatio = (data$Ask * data$Shares.Outstanding)/(data$dividendsPaid *-1)
+allStocks = cbind(data,BookPrice,NetBookPrice,CurrentRatio,NetCurrentRatio,
+                  PB_Ratio,Net_PB_Ratio,NetBookPriceEarningRatio,PriceEarningRatio,
+                  PriceDividendRatio)
 
 
 allStocks = relocate(allStocks,Ask, .after = 1)
@@ -26,11 +28,12 @@ allStocks = relocate(allStocks,BookPrice, .after = 2)
 allStocks = relocate(allStocks,NetBookPrice, .after = 3)
 allStocks = relocate(allStocks,CurrentRatio, .after = 4)
 allStocks = relocate(allStocks,NetCurrentRatio, .after = 5)
-allStocks = relocate(allStocks,"Price/Book Ratio" = PB_Ratio, .after = 6)
-allStocks = relocate(allStocks,"Net Price/Book Ratio" = Net_PB_Ratio, .after = 7)
-allStocks = relocate(allStocks,PriceEarningRatio, .after = 8)
-allStocks = relocate(allStocks,NetBookPriceEarningRatio, .after = 9)
-allStocks = relocate(allStocks,Name, .after = 10)
+allStocks = relocate(allStocks,PriceDividendRatio, .after = 6)
+allStocks = relocate(allStocks,"Price/Book Ratio" = PB_Ratio, .after = 7)
+allStocks = relocate(allStocks,"Net Price/Book Ratio" = Net_PB_Ratio, .after = 8)
+allStocks = relocate(allStocks,PriceEarningRatio, .after = 9)
+allStocks = relocate(allStocks,NetBookPriceEarningRatio, .after = 10)
+allStocks = relocate(allStocks,Name, .after = 11)
 
 
 
@@ -45,7 +48,8 @@ allStocksFiltered = filter(allStocks,
                              &  
                              #(allStocks$CurrentRatio > 2 | allStocks$CurrentRatio < 0) &
                              #allStocks$NetBookPrice > 0 &
-                             allStocks$PriceEarningRatio > 0
+                             allStocks$PriceEarningRatio > 0 & 
+                             allStocks$PriceEarningRatio < 5 
                            )
 
 

@@ -24,7 +24,7 @@ dataOO = dataO %>% group_by((ticker)) %>% slice_max(date)
 
 data = inner_join(dataOG,dataOO,by = c("Symbol" = "ticker"))
 
-write.csv(data,"stock_test_raw.csv")
+write.csv(data,"stock_raw.csv")
 
 
 
