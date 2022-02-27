@@ -27,8 +27,3 @@ data <- inner_join(dataOG, dataOO, by = c("Symbol" = "ticker"))
 
 write.csv(data, "stock_raw.csv")
 
-
-
-#######
-###Data Obtaining###
-#######Single Stocks##########
