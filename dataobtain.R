@@ -1,7 +1,7 @@
 library(tidyverse)
 library(tidyquant)
 library(yfinance)
-
+#test
 ###Data Obtaining###
 #######Pull Data from yahoo##########
 stock1 <- tq_exchange(("NASDAQ"))
