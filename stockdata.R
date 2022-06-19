@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidyquant)
 library(yfinance)
+options(scipen = 100)
 
 ################All Data########
 
