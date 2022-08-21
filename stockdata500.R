@@ -30,9 +30,7 @@ allStocks <- relocate(allStocks, Name, .after = 7)
 write.csv(allStocks, "stocks_500.csv")
 
 allStocksFiltered <- filter(allStocks, allStocks$`Price/Book Ratio` > 0 &
-                              allStocks$`Price/Book Ratio` < .6666666 &
-                              (allStocks$CurrentRatio > 2 |
-                                 allStocks$CurrentRatio < 0) & 
+                              allStocks$`Price/Book Ratio` < 1 &
                               allStocks$P.E.Ratio < 15)
 
 
