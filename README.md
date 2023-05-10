@@ -4,4 +4,4 @@ A script that pulls the most recent stock data from the yahoo finance database, 
 
 This data is pulled on 5/8/2023. This should not be the sole source of investing information, and should be double checked with other sources due the lack of reliability that the yfinance package sometimes displays. This is also not investing advice, which should be discussing with your financial adviser. 
 
-<iframe src="https://public.tableau.com/views/prototypeInvest/Dashboard1?:embed=y&:display_count=yes&:showVizHome=no" height="600px" width="600px"></iframe>
+https://public.tableau.com/views/prototypeInvest/Dashboard1
