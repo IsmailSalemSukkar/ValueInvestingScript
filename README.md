@@ -1,15 +1,7 @@
 # Financial Analysis using R
 
-A simple project that collects stock data and gives ratios of interest per stock. There are 4 scripts in this project that are meant to be run in tandem.
+A script that pulls the most recent stock data from the yahoo finance database, and analyses the data via the quantitive rules of value investing. The below Tableau Visualization is a dashboard that allows a user to explore the data. Numbers in red signify that the user should use caution and check why that number is as high as it is. For example, an extrememly low current ratio may signify a chance of default risk, so should use caution when investing. 
 
-dataobtain.R captures data for ALL stocks on the NYSE, and stockdata.R calculates the Price/Book Ratio, the Current Ratio, the Net/Current Ratio and the P/E Ratio.
+This data is pulled on 5/8/2023. This should not be the sole source of investing information, and should be double checked with other sources due the lack of reliability that the yfinance package sometimes displays. This is also not investing advice, which should be discussing with your financial adviser. 
 
-dataObtainSP500.R and stockdata500.R do the same, except they only use companies in the S&P 500.
-
-Good luck!
-
-Possible future updates:
-
-Set the two scripts to run in tandem
-
-Clean up the working directory
+<iframe src="https://public.tableau.com/views/prototypeInvest/Dashboard1?:embed=y&:display_count=yes&:showVizHome=no" height="600px" width="600px"></iframe>
